@@ -3,7 +3,7 @@ spring:
     name: ecommerce-backend
   data:
     mongodb:
-      uri: ${MONGODB_URI:mongodb://localhost:27017/ecommerce}
+      uri: mongodb+srv://Shriram2005:Shriram2005@cluster0.sfh7knq.mongodb.net/ecommerce?retryWrites=true&w=majority
       database: ecommerce
 
 server:
