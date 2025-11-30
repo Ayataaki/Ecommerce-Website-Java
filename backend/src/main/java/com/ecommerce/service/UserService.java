@@ -83,4 +83,34 @@ public class UserService {
         user.setActive(!user.isActive());
         userRepository.save(user);
     }
+    
+    public UserResponse updateUserRole(String userId, String role) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+        
+        user.getRoles().clear();
+        user.getRoles().add(User.Role.valueOf(role.toUpperCase()));
+        
+        // Ensure USER role is always present
+        if (!user.getRoles().contains(User.Role.USER)) {
+            user.getRoles().add(User.Role.USER);
+        }
+        
+        user = userRepository.save(user);
+        return UserResponse.fromUser(user);
+    }
+    
+    public void activateUser(String userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+        user.setActive(true);
+        userRepository.save(user);
+    }
+    
+    public void deactivateUser(String userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+        user.setActive(false);
+        userRepository.save(user);
+    }
 }

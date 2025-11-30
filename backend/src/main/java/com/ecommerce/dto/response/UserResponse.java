@@ -22,7 +22,9 @@ public class UserResponse {
     private String phone;
     private AddressDto address;
     private Set<String> roles;
+    private String role; // Primary role for admin display
     private String profileImage;
+    private boolean active;
     private LocalDateTime createdAt;
     
     @Data
@@ -49,6 +51,9 @@ public class UserResponse {
                     .build();
         }
         
+        Set<String> roleNames = user.getRoles().stream().map(Enum::name).collect(Collectors.toSet());
+        String primaryRole = roleNames.contains("ADMIN") ? "ADMIN" : "USER";
+        
         return UserResponse.builder()
                 .id(user.getId())
                 .firstName(user.getFirstName())
@@ -56,8 +61,10 @@ public class UserResponse {
                 .email(user.getEmail())
                 .phone(user.getPhone())
                 .address(addressDto)
-                .roles(user.getRoles().stream().map(Enum::name).collect(Collectors.toSet()))
+                .roles(roleNames)
+                .role(primaryRole)
                 .profileImage(user.getProfileImage())
+                .active(user.isActive())
                 .createdAt(user.getCreatedAt())
                 .build();
     }

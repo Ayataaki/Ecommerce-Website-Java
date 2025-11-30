@@ -4,11 +4,13 @@ import com.ecommerce.dto.request.CategoryRequest;
 import com.ecommerce.dto.request.ProductRequest;
 import com.ecommerce.dto.response.ApiResponse;
 import com.ecommerce.dto.response.CategoryResponse;
+import com.ecommerce.dto.response.DashboardStatsResponse;
 import com.ecommerce.dto.response.OrderResponse;
 import com.ecommerce.dto.response.ProductResponse;
 import com.ecommerce.dto.response.UserResponse;
 import com.ecommerce.model.Order;
 import com.ecommerce.service.CategoryService;
+import com.ecommerce.service.DashboardService;
 import com.ecommerce.service.OrderService;
 import com.ecommerce.service.ProductService;
 import com.ecommerce.service.UserService;
@@ -31,6 +33,15 @@ public class AdminController {
     private final CategoryService categoryService;
     private final OrderService orderService;
     private final UserService userService;
+    private final DashboardService dashboardService;
+    
+    // ========== Dashboard ==========
+    
+    @GetMapping("/dashboard/stats")
+    public ResponseEntity<ApiResponse<DashboardStatsResponse>> getDashboardStats() {
+        DashboardStatsResponse stats = dashboardService.getDashboardStats();
+        return ResponseEntity.ok(ApiResponse.success(stats));
+    }
     
     // ========== Product Management ==========
     
@@ -98,6 +109,12 @@ public class AdminController {
         return ResponseEntity.ok(ApiResponse.success(orders));
     }
     
+    @GetMapping("/orders/{id}")
+    public ResponseEntity<ApiResponse<OrderResponse>> getOrderById(@PathVariable String id) {
+        OrderResponse order = orderService.getOrderByIdAdmin(id);
+        return ResponseEntity.ok(ApiResponse.success(order));
+    }
+    
     @GetMapping("/orders/status/{status}")
     public ResponseEntity<ApiResponse<Page<OrderResponse>>> getOrdersByStatus(
             @PathVariable String status,
@@ -148,5 +165,25 @@ public class AdminController {
     public ResponseEntity<ApiResponse<Void>> toggleUserStatus(@PathVariable String id) {
         userService.toggleUserStatus(id);
         return ResponseEntity.ok(ApiResponse.success("User status updated", null));
+    }
+    
+    @PutMapping("/users/{id}/role")
+    public ResponseEntity<ApiResponse<UserResponse>> updateUserRole(
+            @PathVariable String id,
+            @RequestParam String role) {
+        UserResponse user = userService.updateUserRole(id, role);
+        return ResponseEntity.ok(ApiResponse.success("User role updated", user));
+    }
+    
+    @PutMapping("/users/{id}/activate")
+    public ResponseEntity<ApiResponse<Void>> activateUser(@PathVariable String id) {
+        userService.activateUser(id);
+        return ResponseEntity.ok(ApiResponse.success("User activated", null));
+    }
+    
+    @PutMapping("/users/{id}/deactivate")
+    public ResponseEntity<ApiResponse<Void>> deactivateUser(@PathVariable String id) {
+        userService.deactivateUser(id);
+        return ResponseEntity.ok(ApiResponse.success("User deactivated", null));
     }
 }

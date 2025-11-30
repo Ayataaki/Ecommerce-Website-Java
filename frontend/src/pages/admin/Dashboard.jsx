@@ -12,24 +12,37 @@ import LoadingSpinner from '../../components/ui/LoadingSpinner';
 import { adminAPI } from '../../services/api';
 
 export default function AdminDashboard() {
-  const [stats, setStats] = useState(null);
+  const [stats, setStats] = useState({
+    totalRevenue: 0,
+    totalOrders: 0,
+    totalProducts: 0,
+    totalUsers: 0,
+  });
   const [recentOrders, setRecentOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [statsRes, ordersRes] = await Promise.all([
-          adminAPI.getDashboardStats(),
-          adminAPI.getOrders({ size: 5, sortBy: 'createdAt', sortDir: 'desc' }),
-        ]);
-        setStats(statsRes.data.data);
-        setRecentOrders(ordersRes.data.data.content || []);
+        // Fetch stats and orders separately to handle partial failures
+        const statsRes = await adminAPI.getDashboardStats();
+        console.log('Dashboard stats response:', statsRes.data);
+        if (statsRes.data?.data) {
+          setStats(statsRes.data.data);
+        }
       } catch (error) {
-        console.error('Failed to fetch dashboard data:', error);
-      } finally {
-        setIsLoading(false);
+        console.error('Failed to fetch dashboard stats:', error);
       }
+      
+      try {
+        const ordersRes = await adminAPI.getOrders({ size: 5, sortBy: 'createdAt', sortDir: 'desc' });
+        console.log('Orders response:', ordersRes.data);
+        setRecentOrders(ordersRes.data?.data?.content || []);
+      } catch (error) {
+        console.error('Failed to fetch orders:', error);
+      }
+      
+      setIsLoading(false);
     };
     fetchData();
   }, []);
@@ -150,25 +163,31 @@ export default function AdminDashboard() {
                 </tr>
               </thead>
               <tbody className="divide-y dark:divide-gray-700">
-                {recentOrders.map((order) => (
+                {recentOrders.length === 0 ? (
+                  <tr>
+                    <td colSpan="4" className="py-8 text-center text-gray-500">
+                      No recent orders
+                    </td>
+                  </tr>
+                ) : recentOrders.map((order) => (
                   <tr key={order.id}>
                     <td className="py-3">
                       <Link
                         to={`/admin/orders/${order.id}`}
                         className="text-primary-600 hover:text-primary-700 font-medium"
                       >
-                        #{order.orderNumber}
+                        #{order.orderNumber || order.id?.substring(0, 8).toUpperCase()}
                       </Link>
                     </td>
                     <td className="py-3 text-gray-600 dark:text-gray-400">
-                      {order.userName}
+                      {order.userName || order.userEmail || 'Customer'}
                     </td>
                     <td className="py-3 font-medium">
-                      ₹{order.totalAmount.toLocaleString()}
+                      ₹{(order.totalAmount || 0).toLocaleString()}
                     </td>
                     <td className="py-3">
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusBadge(order.orderStatus)}`}>
-                        {order.orderStatus}
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusBadge(order.orderStatus || order.status)}`}>
+                        {order.orderStatus || order.status}
                       </span>
                     </td>
                   </tr>
@@ -190,11 +209,11 @@ export default function AdminDashboard() {
               <span className="font-medium">Add Product</span>
             </Link>
             <Link
-              to="/admin/categories/new"
+              to="/admin/categories"
               className="p-4 border rounded-lg hover:border-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors text-center"
             >
               <CubeIcon className="h-8 w-8 mx-auto mb-2 text-primary-600" />
-              <span className="font-medium">Add Category</span>
+              <span className="font-medium">Manage Categories</span>
             </Link>
             <Link
               to="/admin/orders"

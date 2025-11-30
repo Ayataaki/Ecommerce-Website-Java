@@ -22,6 +22,7 @@ const AdminProducts = lazy(() => import('./pages/admin/Products'));
 const AdminProductForm = lazy(() => import('./pages/admin/ProductForm'));
 const AdminCategories = lazy(() => import('./pages/admin/Categories'));
 const AdminOrders = lazy(() => import('./pages/admin/Orders'));
+const AdminOrderDetails = lazy(() => import('./pages/admin/OrderDetails'));
 const AdminUsers = lazy(() => import('./pages/admin/Users'));
 
 // Auth guards
@@ -85,6 +86,9 @@ function App() {
               } />
               <Route path="/admin/orders" element={
                 <Suspense fallback={<PageLoader />}><AdminRoute><AdminOrders /></AdminRoute></Suspense>
+              } />
+              <Route path="/admin/orders/:id" element={
+                <Suspense fallback={<PageLoader />}><AdminRoute><AdminOrderDetails /></AdminRoute></Suspense>
               } />
               <Route path="/admin/users" element={
                 <Suspense fallback={<PageLoader />}><AdminRoute><AdminUsers /></AdminRoute></Suspense>

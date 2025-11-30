@@ -39,14 +39,10 @@ export default function AdminUsers() {
     }
   };
 
-  const handleToggleActive = async (userId, isActive) => {
+  const handleToggleActive = async (userId) => {
     try {
-      if (isActive) {
-        await adminAPI.deactivateUser(userId);
-      } else {
-        await adminAPI.activateUser(userId);
-      }
-      toast.success(`User ${isActive ? 'deactivated' : 'activated'}`);
+      await adminAPI.toggleUserStatus(userId);
+      toast.success('User status updated');
       fetchUsers();
     } catch (error) {
       console.error('Failed to update user status:', error);
@@ -144,7 +140,7 @@ export default function AdminUsers() {
                       </td>
                       <td className="px-6 py-4">
                         <button
-                          onClick={() => handleToggleActive(user.id, user.active)}
+                          onClick={() => handleToggleActive(user.id)}
                           className={`text-sm font-medium ${
                             user.active
                               ? 'text-red-600 hover:text-red-700'

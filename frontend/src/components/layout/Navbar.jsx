@@ -29,7 +29,7 @@ export default function Navbar() {
   
   const { isAuthenticated, user, logout, isAdmin } = useAuthStore();
   const { getItemCount, fetchCart } = useCartStore();
-  const { getItemCount: getWishlistCount } = useWishlistStore();
+  const { getItemCount: getWishlistCount, fetchWishlist } = useWishlistStore();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -45,8 +45,9 @@ export default function Navbar() {
   useEffect(() => {
     if (isAuthenticated) {
       fetchCart();
+      fetchWishlist();
     }
-  }, [isAuthenticated, fetchCart]);
+  }, [isAuthenticated, fetchCart, fetchWishlist]);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme');

@@ -17,8 +17,11 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class OrderResponse {
     private String id;
+    private String orderNumber;
     private String userId;
+    private String userName;
     private String userEmail;
+    private String orderStatus; // Alias for status
     private List<OrderItemDto> items;
     private ShippingAddressDto shippingAddress;
     private BigDecimal subtotal;
@@ -88,8 +91,11 @@ public class OrderResponse {
         
         return OrderResponse.builder()
                 .id(order.getId())
+                .orderNumber(order.getOrderNumber() != null ? order.getOrderNumber() : order.getId().substring(0, 8).toUpperCase())
                 .userId(order.getUserId())
+                .userName(order.getUserName())
                 .userEmail(order.getUserEmail())
+                .orderStatus(order.getStatus().name())
                 .items(itemDtos)
                 .shippingAddress(addressDto)
                 .subtotal(order.getSubtotal())

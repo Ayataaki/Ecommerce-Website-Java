@@ -23,7 +23,9 @@ public class Order {
     @Id
     private String id;
     
+    private String orderNumber;
     private String userId;
+    private String userName;
     private String userEmail;
     
     @Builder.Default

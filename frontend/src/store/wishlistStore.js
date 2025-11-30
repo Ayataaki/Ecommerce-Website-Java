@@ -13,9 +13,13 @@ export const useWishlistStore = create(
         set({ isLoading: true });
         try {
           const response = await wishlistAPI.get();
-          set({ items: response.data.data || [], isLoading: false });
+          // Handle both direct array and nested response structure
+          const items = Array.isArray(response.data) 
+            ? response.data 
+            : (response.data?.data || []);
+          set({ items, isLoading: false });
         } catch (error) {
-          // If API fails, use local storage items
+          console.error('Failed to fetch wishlist:', error);
           set({ isLoading: false });
         }
       },

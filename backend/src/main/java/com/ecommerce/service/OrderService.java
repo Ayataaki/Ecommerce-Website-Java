@@ -86,8 +86,15 @@ public class OrderService {
                 .country(request.getShippingAddress().getCountry())
                 .build();
         
+        // Generate order number
+        String orderNumber = "ORD" + System.currentTimeMillis();
+        String userName = (user.getFirstName() != null ? user.getFirstName() : "") + 
+                         (user.getLastName() != null ? " " + user.getLastName() : "");
+        
         Order order = Order.builder()
+                .orderNumber(orderNumber)
                 .userId(user.getId())
+                .userName(userName.trim().isEmpty() ? "Customer" : userName.trim())
                 .userEmail(user.getEmail())
                 .items(orderItems)
                 .shippingAddress(shippingAddress)
@@ -163,6 +170,12 @@ public class OrderService {
     // Admin methods
     public Page<OrderResponse> getAllOrders(Pageable pageable) {
         return orderRepository.findAll(pageable).map(OrderResponse::fromOrder);
+    }
+    
+    public OrderResponse getOrderByIdAdmin(String orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order", "id", orderId));
+        return OrderResponse.fromOrder(order);
     }
     
     public Page<OrderResponse> getOrdersByStatus(Order.OrderStatus status, Pageable pageable) {

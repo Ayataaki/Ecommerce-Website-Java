@@ -31,4 +31,8 @@ public interface ProductRepository extends MongoRepository<Product, String> {
     
     @Query("{'active': true, 'tags': {$in: ?0}}")
     Page<Product> findByTagsIn(List<String> tags, Pageable pageable);
+    
+    long countByActiveTrue();
+    
+    long countByStockQuantityLessThan(int stockQuantity);
 }
