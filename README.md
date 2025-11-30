@@ -1,8 +1,10 @@
 # 🛒 E-Commerce Platform
 
-A modern full-stack e-commerce application built with **Spring Boot 3** and **React**.
+A modern Full-Stack E-Commerce Website built with **Spring Boot 3** and **React**.
 
-![Homepage Screenshot](screenshots/homepage.png)
+
+https://github.com/user-attachments/assets/c8f39a48-1b21-4a6a-adca-0a65a1eef143
+
 
 ## ✨ Features
 
@@ -13,18 +15,6 @@ A modern full-stack e-commerce application built with **Spring Boot 3** and **Re
 | 🛒 Shopping Cart | 📂 Category Management |
 | 📦 Order Tracking | 📋 Order Management |
 | ⭐ Reviews & Ratings | 👥 User Management |
-
-## 📸 Screenshots
-
-<p align="center">
-  <img src="screenshots/products.png" alt="Products Page" width="45%">
-  <img src="screenshots/cart.png" alt="Cart Page" width="45%">
-</p>
-
-<p align="center">
-  <img src="screenshots/admin-dashboard.png" alt="Admin Dashboard" width="45%">
-  <img src="screenshots/orders.png" alt="Orders Page" width="45%">
-</p>
 
 ## 🛠️ Tech Stack
 
@@ -85,4 +75,4 @@ VITE_API_URL=http://localhost:8080/api
 
 MIT License
 
-<p align="center">Built with ❤️ using Spring Boot & React</p>
+<p align="center">Built with ❤️ by Shriram Mange</p>
