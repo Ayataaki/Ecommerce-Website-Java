@@ -12,4 +12,4 @@ WORKDIR /app
 COPY --from=builder /app/backend/target/ecommerce-backend-1.0.0.jar app.jar
 ENV JAVA_OPTS="-Xms256m -Xmx512m"
 EXPOSE 8080
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -Dserver.port=${PORT:-8080} -jar /app/app.jar"]
+CMD ["java", "-Dserver.port=8080", "-jar", "/app/app.jar"]
