@@ -10,6 +10,6 @@ RUN mvn clean install -DskipTests
 FROM eclipse-temurin:17-jre-jammy
 WORKDIR /app
 COPY --from=builder /app/backend/target/ecommerce-backend-1.0.0.jar app.jar
-ENV JAVA_OPTS="-Xms256m -Xmx512m"
+ENV PORT=8080
 EXPOSE 8080
-CMD ["java", "-Dserver.port=8080", "-jar", "/app/app.jar"]
+CMD ["sh", "-c", "java -Dserver.port=${PORT} -jar /app/app.jar"]
