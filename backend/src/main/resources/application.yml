@@ -10,7 +10,7 @@ server:
   port: ${PORT:8080}
 
 jwt:
-  secret: ${JWT_SECRET:mySecretKeyForJWTTokenGenerationMustBeAtLeast256BitsLong}
+  secret: ${JWT_SECRET:a15272f1adcbc953c36b75136d1f6a2d1b341e9df1ffc344d66ba7a11deaa0880da45608fede5468b93276ac7594eb5febb712594e6411062281ac9a5fb196d8}
   expiration: 86400000 # 24 hours in milliseconds
 
 cors:
